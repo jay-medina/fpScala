@@ -1,3 +1,3 @@
 ### FP Scala
 
-##Functional Programming scala book 
+## Functional Programming scala book 
