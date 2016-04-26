@@ -14,3 +14,9 @@ lessThan(3, 4)
 lessThan(4,3)
 
 def partial1[A,B,C](a: A, f: (A,B) => C): B => C = b => f(a,b)
+
+val li = List(1,2,3,4,5)
+
+li.init
+
+List(2).init

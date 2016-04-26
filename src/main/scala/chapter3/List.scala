@@ -25,6 +25,12 @@ object List {
     if(as.isEmpty) Nil
     else Cons(as.head, apply(as.tail: _*))
 
+  def append[A](a1: List[A], a2: List[A]): List[A] =
+    a1 match {
+      case Nil => a2
+      case Cons(h,t) => Cons(h, append(t, a2))
+    }
+
 
   /* Exercise 3.2 */
   def tail[T](li: List[T]): List[T] = li match {
@@ -51,6 +57,13 @@ object List {
   def dropWhile[T](l : List[T], f: T => Boolean): List[T] = l match {
     case Nil => List()
     case Cons(h, t) => if( f(h) ) dropWhile(t, f) else l
+  }
+
+  /* exercise 3.6 */
+  def init[T](li: List[T]): List[T] = li match {
+    case Nil => Nil
+    case Cons(h, Nil) => Nil
+    case Cons(h, t) => Cons(h, init(t))
   }
 
 }

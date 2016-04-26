@@ -49,4 +49,11 @@ class ListTest extends FlatSpec {
 
     assert(List.dropWhile(li, (x: Int) => x < 5) === List(5,6,7,8))
   }
+
+  /* exercise 3.6 */
+  it should "give all elements except the last when calling init" in {
+    val li = List(1,2,3,4)
+
+    assert(List.init(li) === List(1,2,3))
+  }
 }
