@@ -1,25 +1,24 @@
 package chapter3
 
+/* Note 'sealed' means that this trait can only be used in this package */
 sealed trait List[+A]
 case object Nil extends List[Nothing]
 case class Cons[+A](head: A, tail: List[A]) extends List[A]
 
 object List {
 
-  def size[T](li : List[T]): Int = li match {
-    case Nil => 0
-    case Cons(_, t) => 1 + size(t)
-  }
+  def foldRight[A,B](as: List[A], zero: B)( f: (A,B) => B): B =
+    as match {
+      case Nil => zero
+      case Cons(x,xs) => f(x, foldRight(xs,zero)(f))
+    }
 
-  def sum(ints: List[Int]): Int = ints match {
-    case Nil => 0
-    case Cons(x,xs) => x + sum(xs)
-  }
+  def sum(ints: List[Int]): Int =
+    foldRight(ints, 0)((x,y) => x + y)
 
-  def product(ds: List[Double]): Double = ds match {
-    case Nil => 1
-    case Cons(x, xs) => x * product(xs)
-  }
+  def product(ds: List[Double]): Double =
+    foldRight(ds, 1.0)((x, y) => x + y)
+
 
   def apply[A](as: A*): List[A] =
     if(as.isEmpty) Nil
@@ -30,6 +29,8 @@ object List {
       case Nil => a2
       case Cons(h,t) => Cons(h, append(t, a2))
     }
+
+
 
 
   /* Exercise 3.2 */
@@ -59,6 +60,8 @@ object List {
     case Cons(h, t) => if( f(h) ) dropWhile(t, f) else l
   }
 
+  def dropWhileCurried[T](li: List[T])(f: T => Boolean): List[T] = dropWhile(li, f)
+
   /* exercise 3.6 */
   def init[T](li: List[T]): List[T] = li match {
     case Nil => Nil
@@ -66,25 +69,68 @@ object List {
     case Cons(h, t) => Cons(h, init(t))
   }
 
-}
+  /* exercise 3.9 */
+  def length[T](li : List[T]): Int =
+    foldRight(li, 0)((_,y) => 1 + y)
 
-object Runner {
-  private def exercise3_1(): Unit = {
-    val x = List(1,2,3,4,5) match {
-      case Cons(x, Cons(2, Cons(4, _))) => x
-      case Nil => 42
-      case Cons(x, Cons(y, Cons(3, Cons(4, _)))) => x + y
-      case Cons(h,t) => h + List.sum(t)
-      case _ => 101
+  /* Exercise 3.10 */
+  def foldLeft[A,B](as: List[A], zero: B)( f: (B, A) => B): B = {
+    def loop(as: List[A], acc: B): B = as match {
+      case Nil => acc
+      case Cons(x,xs) => loop(xs, f(acc, x))
     }
 
-    println(x)
+    loop(as, zero)
   }
 
+  /* exercise 3.11 */
+  def length2[T](li : List[T]): Int =
+    foldLeft(li, 0)((y, _) => 1 + y)
 
-  def main(args: Array[String]) {
-    exercise3_1()
+  def sum2(ints: List[Int]): Int =
+    foldLeft(ints, 0)((total,next) => next + total)
+
+  def product2(ds: List[Double]): Double =
+    foldLeft(ds, 1.0)((total, n) => n + total)
+
+  /* exercise 3.12 */
+  def reverse[T](li: List[T]): List[T] = li match {
+    case Nil => List()
+    case Cons(x,xs) => append(reverse(xs), List(x))
   }
+
+  def reverseFold[T](li: List[T]): List[T] =
+    foldLeft[T, List[T]](li: List[T], List())( (t,n) => append(List(n), t))
+
+  /* exercise 3.14 */
+  def appendFold[A](a1: List[A], a2: List[A]): List[A] =
+    foldRight(a1, a2)((y,total) => Cons(y, total))
+
+  /* exercise 3.15 */
+  def flatten[A](li: List[List[A]]): List[A] = li match {
+    case Nil => List()
+    case Cons(x, xs) => append(x, flatten(xs))
+  }
+
+  /* exercise 3.15 */
+  def flattenFold[A](li: List[List[A]]): List[A] =
+    foldRight[List[A], List[A]] (li, List()) ((y, total) => append(y, total))
+
+
+  /* exercise 3.18  -- use this to solve 3.16 and 3.17 */
+  def map[A,B](as: List[A])(implicit f: A => B): List[B] = as match {
+    case Nil => List()
+    case Cons(x, xs) => Cons(f(x), map(xs))
+  }
+
+  /* exercise 3.19 */
+  def filter[A](as: List[A])(implicit f: A => Boolean): List[A] = as match {
+    case Nil => List()
+    case Cons(x, xs) => if(f(x)) Cons(x, filter(xs)) else filter(xs)
+  }
+
+  /* TODO: exercise 3.20 */
+
 }
 
 
