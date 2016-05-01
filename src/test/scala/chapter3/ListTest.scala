@@ -139,4 +139,44 @@ class ListTest extends FlatSpec {
     val li = List(1,2,3,4,5,6,7,8,9)
     assert(List.filter(li)(x => x % 2 == 0) === List(2,4,6,8))
   }
+
+  /* exercise 3.20 */
+  it should "implement flatmap" in {
+    val li = List(1,2,3)
+
+    val result = List.flatMap(li)(x => List(x,x))
+
+    assert(result === List(1,1,2,2,3,3))
+  }
+
+  /* exercise 3.21 */
+  it should "be able to filter out odd numbers using flatmap version" in {
+    val li = List(1,2,3,4,5,6,7,8,9)
+    assert(List.filterUsingFlatMap(li)(x => x % 2 == 0) === List(2,4,6,8))
+  }
+
+  /* exercise 3.22 */
+  it should "be able to combine each list item to create a combined list" in {
+    val li = List(1,2,3)
+    val li2 = List(4,5,6)
+
+    assert(List.combineListOfInts(li, li2) === List(5,7,9))
+  }
+
+  /* exercise 3.23 */
+  it should "same as 3.22 just with generalized zipWith" in {
+    val li = List(1,2,3)
+    val li2 = List(4,5,6)
+
+    assert(List.zipWith(li, li2)((x,y) => x + y) === List(5,7,9))
+  }
+
+  /* exercise 3.24 */
+  it should "determine whether a sub list exist" in {
+    val li = List(1,2,3,4)
+    val sub = List(2,3)
+
+    assert(List.hasSubsequence(li, sub))
+    assert(List.hasSubsequence(li, List(1,1)) === false)
+  }
 }

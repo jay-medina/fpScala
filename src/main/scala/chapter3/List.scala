@@ -129,8 +129,43 @@ object List {
     case Cons(x, xs) => if(f(x)) Cons(x, filter(xs)) else filter(xs)
   }
 
-  /* TODO: exercise 3.20 */
+  /* exercise 3.20 */
+  def flatMap[A,B](as: List[A])(f: A => List[B]): List[B] = {
+    val m = map(as)(f)
 
+    flattenFold(m)
+  }
+
+  /* exercise 3.21 */
+  def filterUsingFlatMap[A](as: List[A])(f: A => Boolean): List[A] =
+    flatMap(as)(x => if(f(x)) List(x) else List())
+
+  /* exercise 3.22 */
+  def combineListOfInts(li: List[Int], li2: List[Int]): List[Int] = (li, li2) match {
+    case (Cons(x,xs), Cons(y,ys)) => Cons(x + y, combineListOfInts(xs, ys))
+    case _ => List()
+  }
+
+  /* exercise 3.23 */
+  def zipWith[A, B, C](li: List[A], li2: List[B])(combiner: (A, B) => C): List[C] =
+    (li, li2) match {
+      case (Cons(x,xs), Cons(y,ys)) => Cons(combiner(x,y), zipWith(xs, ys)(combiner))
+      case _ => List()
+    }
+
+  /* exercise 3.24 */
+  def head[A](li: List[A]): A = li match {
+    case Nil => throw new Error("No head on empty list")
+    case Cons(x, _) => x
+  }
+
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean =
+    if(List.length(sub) == 0) true
+    else sup match {
+      case Nil => false
+      case Cons(x,xs) => if(x == head(sub)) hasSubsequence(xs, tail(sub)) || hasSubsequence(xs, sub)
+                         else hasSubsequence(xs, sub)
+    }
 }
 
 
