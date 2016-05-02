@@ -37,4 +37,60 @@ class TreeTest extends FlatSpec {
                )
     assert(Tree.maximum(tree) === 5)
   }
+
+  /* exercise 3.27 */
+  it should "return the depth of a specific tree" in {
+    val tree = Branch(
+                 Branch(
+                   Leaf(1),
+                   Branch(
+                     Leaf(2),
+                     Leaf(0)
+                   )
+                 ),
+                 Branch(
+                   Branch(
+                     Leaf(5),
+                     Leaf(0)
+                   ),
+                   Leaf(-3)
+                 )
+               )
+    assert(Tree.depth(tree) === 4)
+  }
+
+  /* exercise 3.28 */
+  it should "map elements of a tree" in {
+    val tree = Branch(
+      Branch(
+        Leaf(1),
+        Leaf(2)
+      ),
+      Branch(
+        Leaf(-3),
+        Branch(
+          Leaf(5),
+          Leaf(0)
+        )
+      )
+    )
+
+    val r = Branch(
+              Branch(
+                Leaf(3),
+                Leaf(4)
+              ),
+              Branch(
+                Leaf(-1),
+                Branch(
+                  Leaf(7),
+                  Leaf(2)
+                )
+              )
+            )
+
+    val result = Tree.map(tree)(x => x + 2)
+
+    assert(r === result)
+  }
 }

@@ -19,9 +19,22 @@ object Tree {
       case Branch(l, r) => loop(l, big) max loop(r, big)
     }
 
-
     loop(tree, Int.MinValue)
   }
 
-  /* TODO: exercise 3.27 */
+  /* exercise 3.27 */
+  def depth[A](tree: Tree[A]): Int = {
+    def loop(t: Tree[A], d: Int): Int = t match {
+      case Leaf(x) => d
+      case Branch(l, r) => loop(l, d + 1) max loop(r, d + 1)
+    }
+
+    loop(tree, 1)
+  }
+
+  /* exercise 3.28 */
+  def map[A, B](tree: Tree[A])(f: A => B): Tree[B] = tree match {
+    case Leaf(x) => Leaf(f(x))
+    case Branch(l,r) => Branch(map(l)(f), map(r)(f))
+  }
 }
