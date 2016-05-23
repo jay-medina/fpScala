@@ -20,3 +20,15 @@ val li = List(1,2,3,4,5)
 li.init
 
 List(2).init
+
+Some(4).getOrElse(Some(7))
+
+None getOrElse 7
+
+Some(4) orElse Some(10)
+
+None orElse Some(33)
+
+Some(4) filter( x => x == 5)
+
+None filter(x => true)
