@@ -45,4 +45,33 @@ class OptionSpec extends FlatSpec{
     assert(None.filter(_ == 5) === None)
   }
 
+  it should "be able to give the mean of a sequence of doubles" in {
+    val arr = Array(1.0, 2.0, 3.0, 4.0)
+
+    assert(OptionRunner.mean(Array[Double]()) == None)
+    assert(OptionRunner.mean(arr) == Some(2.5))
+  }
+
+  it should "be able to give the variance of a sequence of doubles" in {
+    val arr = Array(1.0,2.0,3.0,4.0)
+
+    assert(OptionRunner.variance(Array[Double]()) == None)
+    assert(OptionRunner.variance(arr) == Some(1.25))
+  }
+
+  it should "be able to convert a list of options to an option of list of items" in {
+    val arr = List(Some(4), Some(5), Some(23))
+    val arr2 = List(Some(4), None, Some(23))
+
+    assert(OptionRunner.sequence(arr) == Some(List(4,5,23)))
+    assert(OptionRunner.sequence(arr2) == None)
+  }
+
+  it should "be able to traverse through a list and convert to a list of options" in {
+    val arr = List(4,5,23)
+    val result = OptionRunner.traverse(arr)(x => Some(x.toString))
+
+   assert(result == Some(arr.map(_.toString)))
+  }
+
 }
