@@ -47,14 +47,8 @@ object OptionRunner {
 
   /* exercise 4.5 */
   def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] =
-    //Some(a.map(f).map({case Some(x) => x}))
-    for {
-      aa <- a
-      bb <- f(aa)
+    Some(a.map(f).map({case Some(x) => x}))
 
-    } yield bb match {
-        case Some(x) => x
-      }
 
   /* exercise 4.4 */
   def sequence[A](a: List[Option[A]]): Option[List[A]] =
