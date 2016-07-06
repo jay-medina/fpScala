@@ -1,3 +1,5 @@
+import chapter6.SimpleRNG
+
 import scala.util.Random
 
 val rng = new Random()
@@ -15,3 +17,4 @@ def rollDie: Int = {
 
   rng.nextInt(6)
 }
+

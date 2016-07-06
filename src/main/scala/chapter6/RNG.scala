@@ -13,3 +13,13 @@ case class SimpleRNG(seed: Long) extends RNG {
     (n, nextRNG)
   }
 }
+
+object RNG2 {
+  def main(args: Array[String]) = {
+
+    val myRNG = SimpleRNG(42)
+    val (n1, rng2) = myRNG.nextInt
+
+    println(n1, rng2)
+  }
+}
