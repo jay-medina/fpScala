@@ -16,6 +16,21 @@ case class SimpleRNG(seed: Long) extends RNG {
 
 object RNG2 {
 
+  type Rand[+A] = RNG => (A, RNG)
+
+  val int: Rand[Int] = x => x.nextInt
+
+  def unit[A](a: A): Rand[A] = rng => (a, rng)
+
+  def map[A,B](s: Rand[A])(f: A => B): Rand[B] =
+    rng => {
+      val (a, rng2) = s(rng)
+      (f(a), rng2)
+    }
+
+  def nonNegativeEven: Rand[Int] =
+    map(nonNegativeInt)(i => i - i % 2)
+
   def randomPair(rng: RNG): ((Int,Int), RNG) = {
     val (i1, rng2) = rng.nextInt
     val (i2, rng3) = rng2.nextInt
@@ -74,6 +89,14 @@ object RNG2 {
     loop(count, rng, Nil)
   }
 
+  /* exercise 6.5 */
+  def double_map: Rand[Double] =
+    map(nonNegativeInt)(x => x / (Int.MaxValue.toDouble + 1))
+
+  /* TODO exercise 6.6 */
+  def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A,B) => C): Rand[C] = ???
+
+
   def main(args: Array[String]) = {
 
     val myRNG = SimpleRNG(42)
@@ -83,6 +106,9 @@ object RNG2 {
 
     //println(double(rng2))
 
-    (ints(4)(myRNG))._1.foreach(println)
+    //(ints(4)(myRNG))._1.foreach(println)
+
+    println (double(myRNG))
+    println (double_map(myRNG))
   }
 }
